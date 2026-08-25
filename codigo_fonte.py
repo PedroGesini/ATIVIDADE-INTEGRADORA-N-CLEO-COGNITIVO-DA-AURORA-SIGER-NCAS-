@@ -1,10 +1,11 @@
+from registros import cadastrar_registro, consultar_registros
 # ====================================
 #      NCAS - AURORA SIGER
 # ====================================
 
 while True:
 
-    print(f"----- SEJA BEM-VINDO, {insertname} -----")
+    print(f"----- SEJA BEM-VINDO! -----")
 
     print("""
         SISTEMA OPERACIONAL AURORA
@@ -31,11 +32,11 @@ while True:
     match opcao:
 
         case 1:
-            # Cadastrar registro
+            cadastrar_registro()
             input("\nPressione ENTER para voltar ao menu...")
 
         case 2:
-            # Consultar registros
+            consultar_registros()
             input("\nPressione ENTER para voltar ao menu...")
 
         case 3:
