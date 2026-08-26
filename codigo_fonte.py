@@ -1,4 +1,7 @@
 from registros import cadastrar_registro, consultar_registros
+from modulos import consultar_modulos, consultar_modulo_especifico
+3
+
 # ====================================
 #      NCAS - AURORA SIGER
 # ====================================
@@ -40,7 +43,7 @@ while True:
             input("\nPressione ENTER para voltar ao menu...")
 
         case 3:
-            # Consultar módulos
+            consultar_modulos()
             input("\nPressione ENTER para voltar ao menu...")
 
         case 4:
