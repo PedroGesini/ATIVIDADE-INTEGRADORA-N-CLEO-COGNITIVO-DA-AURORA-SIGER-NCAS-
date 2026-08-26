@@ -2,19 +2,15 @@ from pathlib import Path
 from datetime import datetime
 from tabulate import tabulate
 
-# ==========================================
-# CAMINHOS DO PROJETO
-# ==========================================
 
+# CAMINHOS DO PROJETO
 BASE_DIR = Path(__file__).resolve().parent.parent
 PASTA_DATA = BASE_DIR / "data"
 
 ARQUIVO_HISTORICO = PASTA_DATA / "historico_colonia.txt"
 
 
-# ==========================================
 # REGISTRAR AÇÃO NO HISTÓRICO
-# ==========================================
 
 def registrar_historico(acao, modulo="Sistema", descricao=""):
 
@@ -33,9 +29,7 @@ def registrar_historico(acao, modulo="Sistema", descricao=""):
         arquivo.write(linha)
 
 
-# ==========================================
 # CONSULTAR HISTÓRICO GERAL
-# ==========================================
 
 def consultar_historico():
 

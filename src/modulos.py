@@ -5,9 +5,7 @@ from tabulate import tabulate
 from .historico import registrar_historico
 
 
-# ==========================================
 # CAMINHOS DO PROJETO
-# ==========================================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 PASTA_DATA = BASE_DIR / "data"
@@ -15,9 +13,7 @@ PASTA_DATA = BASE_DIR / "data"
 ARQUIVO_JSON = PASTA_DATA / "dados_colonia.json"
 
 
-# ==========================================
 # DADOS DOS MÓDULOS DA COLÔNIA
-# ==========================================
 
 colonia_aurora_siger = {
     "Habitação": {
@@ -123,10 +119,7 @@ colonia_aurora_siger = {
     }
 }
 
-
-# ==========================================
 # CRIAR / ATUALIZAR JSON
-# ==========================================
 
 def criar_dados_json():
 
@@ -148,9 +141,7 @@ def criar_dados_json():
         )
 
 
-# ==========================================
 # CARREGAR DADOS
-# ==========================================
 
 def carregar_dados():
 
@@ -185,9 +176,7 @@ def carregar_dados():
             return json.load(arquivo)
 
 
-# ==========================================
 # CONSULTAR TODOS OS MÓDULOS
-# ==========================================
 
 def consultar_modulos():
 
@@ -250,11 +239,7 @@ def consultar_modulos():
         "Consulta geral dos módulos da colônia"
     )
 
-
-# ==========================================
 # CONSULTAR MÓDULO ESPECÍFICO
-# ==========================================
-
 def consultar_modulo_especifico():
 
     dados = carregar_dados()
@@ -326,11 +311,7 @@ def consultar_modulo_especifico():
         f"Consulta detalhada do módulo {nome}"
     )
 
-
-# ==========================================
 # TESTE DO ARQUIVO
-# ==========================================
-
 if __name__ == "__main__":
 
     consultar_modulos()

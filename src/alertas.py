@@ -5,20 +5,14 @@ from tabulate import tabulate
 from .historico import registrar_historico
 
 
-# ==========================================
 # CAMINHOS DO PROJETO
-# ==========================================
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 PASTA_DATA = BASE_DIR / "data"
 
 ARQUIVO_ALERTAS = PASTA_DATA / "alertas_colonia.txt"
 
 
-# ==========================================
 # CRIAR ALERTA
-# ==========================================
-
 def criar_alerta():
 
     print("\n")
@@ -125,10 +119,8 @@ def criar_alerta():
     print("=" * 70)
 
 
-# ==========================================
-# GERAR ID DO ALERTA
-# ==========================================
 
+# GERAR ID DO ALERTA
 def gerar_id_alerta():
 
     if not ARQUIVO_ALERTAS.exists():
@@ -167,9 +159,7 @@ def gerar_id_alerta():
     return max(ids) + 1
 
 
-# ==========================================
 # ANALISAR ALERTA
-# ==========================================
 
 def analisar_alerta():
 
@@ -287,10 +277,7 @@ def analisar_alerta():
     descricao = alerta_encontrado[4]
     status = alerta_encontrado[5]
 
-    # ==========================================
     # VERIFICAR SE JÁ FOI FINALIZADO
-    # ==========================================
-
     if status == "Finalizado":
 
         print("\nEste alerta já foi finalizado.")
@@ -299,10 +286,7 @@ def analisar_alerta():
 
         return
 
-    # ==========================================
     # ANÁLISE DA PRIORIDADE
-    # ==========================================
-
     match prioridade:
 
         case "Baixa":
@@ -373,10 +357,8 @@ def analisar_alerta():
                 "Realizar análise manual."
             )
 
-    # ==========================================
+   
     # EXIBIR ANÁLISE
-    # ==========================================
-
     print("\n")
     print("=" * 70)
     print("                     ANÁLISE DO ALERTA")
@@ -410,10 +392,8 @@ def analisar_alerta():
 
     print("\n" + "-" * 70)
 
-    # ==========================================
-    # FINALIZAR ALERTA
-    # ==========================================
 
+    # FINALIZAR ALERTA
     print("\nDeseja finalizar este alerta?")
     print("1 - Sim")
     print("2 - Não")

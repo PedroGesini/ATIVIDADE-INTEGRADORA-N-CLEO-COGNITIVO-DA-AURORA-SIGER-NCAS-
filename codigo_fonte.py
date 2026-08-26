@@ -6,9 +6,8 @@ from src.regras import executar_regra_logica
 from src.assistente import assistente_inteligente
 
 
-# ====================================
 #      NCAS - AURORA SIGER
-# ====================================
+
 
 while True:
 

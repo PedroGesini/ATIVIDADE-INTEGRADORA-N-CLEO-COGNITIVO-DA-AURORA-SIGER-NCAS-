@@ -16,9 +16,7 @@ ARQUIVO_ALERTAS = PASTA_DATA / "alertas_colonia.txt"
 ARQUIVO_HISTORICO = PASTA_DATA / "historico_colonia.txt"
 
 
-# ==========================================
 # CONFIGURAÇÃO DO OLLAMA
-# ==========================================
 
 cliente_ollama = ollama.Client(
     host="http://127.0.0.1:11434"
@@ -35,9 +33,7 @@ LIMITE_ALERTAS_CONTEXTO = 30
 LIMITE_HISTORICO_CONTEXTO = 40
 
 
-# ==========================================
 # ASSISTENTE INTELIGENTE
-# ==========================================
 
 def assistente_inteligente():
 
@@ -69,10 +65,7 @@ def assistente_inteligente():
         print(resposta)
 
 
-# ==========================================
 # CONSULTAR IA
-# ==========================================
-
 def consultar_ia(pergunta):
 
     fontes = identificar_fontes(pergunta)
@@ -227,10 +220,7 @@ PERGUNTA DO OPERADOR
             f"Erro: {erro}"
         )
 
-
-# ==========================================
 # IDENTIFICAR FONTES NECESSÁRIAS
-# ==========================================
 
 def identificar_fontes(pergunta):
 
@@ -302,8 +292,6 @@ def identificar_fontes(pergunta):
     if contem_algum(texto, palavras_modulos):
         fontes.add("modulos")
 
-    # Perguntas sobre problemas e melhorias normalmente precisam
-    # cruzar situação atual, registros e alertas.
     if contem_algum(
         texto,
         [
@@ -331,10 +319,7 @@ def identificar_fontes(pergunta):
     return fontes
 
 
-# ==========================================
 # FUNÇÕES AUXILIARES DE TEXTO
-# ==========================================
-
 def normalizar_texto(texto):
 
     substituicoes = str.maketrans({
@@ -374,10 +359,7 @@ def contem_algum(texto, palavras):
     )
 
 
-# ==========================================
 # CRIAR CONTEXTO DOS MÓDULOS
-# ==========================================
-
 def criar_contexto_modulos(dados):
 
     modulos = dados.get("modulos", {})
@@ -437,10 +419,7 @@ def criar_contexto_modulos(dados):
     return "\n\n".join(partes)
 
 
-# ==========================================
 # LER LINHAS DE ARQUIVO
-# ==========================================
-
 def ler_linhas(arquivo, limite=None):
 
     if not arquivo.exists():
@@ -469,10 +448,7 @@ def ler_linhas(arquivo, limite=None):
         return []
 
 
-# ==========================================
 # CARREGAR REGISTROS
-# ==========================================
-
 def carregar_registros(limite=None):
 
     linhas = ler_linhas(
@@ -538,10 +514,7 @@ def carregar_registros(limite=None):
     )
 
 
-# ==========================================
 # CARREGAR ALERTAS
-# ==========================================
-
 def carregar_alertas(limite=None):
 
     linhas = ler_linhas(
@@ -590,10 +563,7 @@ def carregar_alertas(limite=None):
     )
 
 
-# ==========================================
 # CARREGAR HISTÓRICO
-# ==========================================
-
 def carregar_historico(limite=None):
 
     linhas = ler_linhas(
@@ -638,9 +608,6 @@ def carregar_historico(limite=None):
     )
 
 
-# ==========================================
 # TESTE DIRETO
-# ==========================================
-
 if __name__ == "__main__":
     assistente_inteligente()

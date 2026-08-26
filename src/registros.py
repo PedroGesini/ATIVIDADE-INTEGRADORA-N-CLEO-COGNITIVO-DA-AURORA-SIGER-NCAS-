@@ -9,10 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 PASTA_DATA = BASE_DIR / "data"
 
 ARQUIVO_TXT = PASTA_DATA / "registros_colonia.txt"
-# ==========================================
-# CADASTRAR REGISTRO
-# ==========================================
 
+# CADASTRAR REGISTRO
 def cadastrar_registro():
 
     print("\n")
@@ -55,9 +53,7 @@ def cadastrar_registro():
 
         arquivo.write(linha + "\n")
 
-    # ==========================================
     # REGISTRAR NO HISTÓRICO
-    # ==========================================
 
     registrar_historico(
         "Cadastro de registro",
@@ -70,9 +66,7 @@ def cadastrar_registro():
     print("-" * 70)
 
 
-# ==========================================
 # CONSULTAR REGISTROS
-# ==========================================
 
 def consultar_registros():
 
@@ -173,9 +167,7 @@ def consultar_registros():
     print("=" * 120)
     print(f"Total de registros: {len(tabela)}")
 
-    # ==========================================
     # REGISTRAR NO HISTÓRICO
-    # ==========================================
 
     registrar_historico(
         "Consulta de registros",

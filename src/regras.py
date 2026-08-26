@@ -19,9 +19,7 @@ def executar_regra_logica():
 
     ocorrencias = []
 
-    # ==========================================
     # ANÁLISE DOS MÓDULOS
-    # ==========================================
 
     for nome, info in modulos.items():
 
@@ -51,9 +49,7 @@ def executar_regra_logica():
                 f"{nome}: módulo possui prioridade operacional máxima."
             )
 
-    # ==========================================
     # RESULTADO
-    # ==========================================
 
     if not ocorrencias:
 
