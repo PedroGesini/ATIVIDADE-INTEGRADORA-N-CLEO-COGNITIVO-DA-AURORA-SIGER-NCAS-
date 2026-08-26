@@ -2,6 +2,8 @@ import os
 from datetime import datetime
 from tabulate import tabulate
 
+from historico import registrar_historico
+
 
 ARQUIVO_TXT = "registros_colonia.txt"
 
@@ -18,8 +20,22 @@ def cadastrar_registro():
     print("=" * 70)
 
     modulo = input("Módulo: ").strip()
+
+    if not modulo:
+        print("O módulo não pode ficar vazio.")
+        return
+
     descricao = input("Descrição da ocorrência: ").strip()
+
+    if not descricao:
+        print("A descrição não pode ficar vazia.")
+        return
+
     responsavel = input("Responsável: ").strip()
+
+    if not responsavel:
+        print("O responsável não pode ficar vazio.")
+        return
 
     data = datetime.now().strftime("%d/%m/%Y %H:%M")
 
@@ -30,8 +46,23 @@ def cadastrar_registro():
         f"Responsável: {responsavel}"
     )
 
-    with open(ARQUIVO_TXT, "a", encoding="utf-8") as arquivo:
+    with open(
+        ARQUIVO_TXT,
+        "a",
+        encoding="utf-8"
+    ) as arquivo:
+
         arquivo.write(linha + "\n")
+
+    # ==========================================
+    # REGISTRAR NO HISTÓRICO
+    # ==========================================
+
+    registrar_historico(
+        "Cadastro de registro",
+        modulo,
+        f"Ocorrência registrada: {descricao} | Responsável: {responsavel}"
+    )
 
     print("\n" + "-" * 70)
     print("Registro salvo com sucesso!")
@@ -54,7 +85,11 @@ def consultar_registros():
         print("\nNenhum registro encontrado.")
         return
 
-    with open(ARQUIVO_TXT, "r", encoding="utf-8") as arquivo:
+    with open(
+        ARQUIVO_TXT,
+        "r",
+        encoding="utf-8"
+    ) as arquivo:
 
         linhas = [
             linha.strip()
@@ -73,22 +108,30 @@ def consultar_registros():
 
         try:
 
-            data = linha.split("]")[0].replace("[", "").strip()
+            data = (
+                linha
+                .split("]")[0]
+                .replace("[", "")
+                .strip()
+            )
 
             modulo = (
-                linha.split("Módulo:")[1]
+                linha
+                .split("Módulo:")[1]
                 .split("|")[0]
                 .strip()
             )
 
             ocorrencia = (
-                linha.split("Ocorrência:")[1]
+                linha
+                .split("Ocorrência:")[1]
                 .split("|")[0]
                 .strip()
             )
 
             responsavel = (
-                linha.split("Responsável:")[1]
+                linha
+                .split("Responsável:")[1]
                 .strip()
             )
 
@@ -128,3 +171,13 @@ def consultar_registros():
 
     print("=" * 120)
     print(f"Total de registros: {len(tabela)}")
+
+    # ==========================================
+    # REGISTRAR NO HISTÓRICO
+    # ==========================================
+
+    registrar_historico(
+        "Consulta de registros",
+        "Sistema",
+        f"Consulta geral realizada. Total de registros: {len(tabela)}"
+    )

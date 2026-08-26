@@ -2,6 +2,8 @@ import json
 import os
 from tabulate import tabulate
 
+from historico import registrar_historico
+
 
 # ==========================================
 # DADOS DOS MÓDULOS DA COLÔNIA
@@ -144,7 +146,12 @@ def carregar_dados():
 
     try:
 
-        with open(ARQUIVO_JSON, "r", encoding="utf-8") as arquivo:
+        with open(
+            ARQUIVO_JSON,
+            "r",
+            encoding="utf-8"
+        ) as arquivo:
+
             dados = json.load(arquivo)
 
         return dados
@@ -156,7 +163,12 @@ def carregar_dados():
 
         criar_dados_json()
 
-        with open(ARQUIVO_JSON, "r", encoding="utf-8") as arquivo:
+        with open(
+            ARQUIVO_JSON,
+            "r",
+            encoding="utf-8"
+        ) as arquivo:
+
             return json.load(arquivo)
 
 
@@ -176,6 +188,7 @@ def consultar_modulos():
     modulos = dados.get("modulos", {})
 
     if not modulos:
+
         print("Nenhum módulo cadastrado.")
         return
 
@@ -218,6 +231,16 @@ def consultar_modulos():
 
     print("=" * 120)
 
+    # ==========================================
+    # REGISTRAR NO HISTÓRICO
+    # ==========================================
+
+    registrar_historico(
+        "Consulta de módulos",
+        "Sistema",
+        "Consulta geral dos módulos da colônia"
+    )
+
 
 # ==========================================
 # CONSULTAR MÓDULO ESPECÍFICO
@@ -230,12 +253,14 @@ def consultar_modulo_especifico():
     modulos = dados.get("modulos", {})
 
     if not modulos:
+
         print("Nenhum módulo cadastrado.")
         return
 
     print("\nMódulos disponíveis:")
 
     for nome in modulos:
+
         print(f"- {nome}")
 
     nome = input("\nDigite o nome do módulo: ").strip()
@@ -243,6 +268,7 @@ def consultar_modulo_especifico():
     info = modulos.get(nome)
 
     if info is None:
+
         print("Módulo não encontrado.")
         return
 
@@ -250,18 +276,50 @@ def consultar_modulo_especifico():
     print(f"              {nome.upper()}")
     print("=" * 60)
 
-    print(f"Status:                 {info['status_operacional']}")
-    print(f"Prioridade operacional: {info['prioridade_operacional']}")
-    print(f"Consumo energético:     {info['consumo_energetico_kwh']} kWh")
-    print(f"Comunicação:            {info['necessidade_comunicacao']}")
-    print(f"Armazenamento:          {info['capacidade_armazenamento']}")
+    print(
+        f"Status:                 "
+        f"{info['status_operacional']}"
+    )
+
+    print(
+        f"Prioridade operacional: "
+        f"{info['prioridade_operacional']}"
+    )
+
+    print(
+        f"Consumo energético:     "
+        f"{info['consumo_energetico_kwh']} kWh"
+    )
+
+    print(
+        f"Comunicação:            "
+        f"{info['necessidade_comunicacao']}"
+    )
+
+    print(
+        f"Armazenamento:          "
+        f"{info['capacidade_armazenamento']}"
+    )
 
     print("\nConexões:")
 
     for destino, distancia in info["conexoes"]:
-        print(f"  → {destino}: {distancia}m")
+
+        print(
+            f"  → {destino}: {distancia}m"
+        )
 
     print("=" * 60)
+
+    # ==========================================
+    # REGISTRAR NO HISTÓRICO
+    # ==========================================
+
+    registrar_historico(
+        "Consulta de módulo",
+        nome,
+        f"Consulta detalhada do módulo {nome}"
+    )
 
 
 # ==========================================
@@ -269,4 +327,5 @@ def consultar_modulo_especifico():
 # ==========================================
 
 if __name__ == "__main__":
+
     consultar_modulos()

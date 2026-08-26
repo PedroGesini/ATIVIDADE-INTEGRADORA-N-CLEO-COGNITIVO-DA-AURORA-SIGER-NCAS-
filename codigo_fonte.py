@@ -1,6 +1,10 @@
 from registros import cadastrar_registro, consultar_registros
 from modulos import consultar_modulos, consultar_modulo_especifico
-3
+from alertas import criar_alerta, analisar_alerta
+from historico import consultar_historico
+from regras import executar_regra_logica
+from assistente import assistente_inteligente
+
 
 # ====================================
 #      NCAS - AURORA SIGER
@@ -8,11 +12,12 @@ from modulos import consultar_modulos, consultar_modulo_especifico
 
 while True:
 
-    print(f"----- SEJA BEM-VINDO! -----")
+    print("\n" + "=" * 50)
+    print("          SEJA BEM-VINDO!")
+    print("     SISTEMA OPERACIONAL AURORA")
+    print("=" * 50)
 
     print("""
-        SISTEMA OPERACIONAL AURORA
-
     1 - Cadastrar registro
     2 - Consultar registros
     3 - Consultar módulos
@@ -24,52 +29,77 @@ while True:
     9 - Sair
     """)
 
-    # PROGRAMA PRINCIPAL
     try:
-        opcao = int(input("DIGITE A OPÇÃO DESEJADA: "))
+        opcao = int(
+            input("DIGITE A OPÇÃO DESEJADA: ")
+        )
 
     except ValueError:
-        print("Entrada inválida! Por favor, digite um número.")
+        print(
+            "\nEntrada inválida! "
+            "Por favor, digite um número."
+        )
         continue
 
     match opcao:
 
         case 1:
             cadastrar_registro()
-            input("\nPressione ENTER para voltar ao menu...")
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )
 
         case 2:
             consultar_registros()
-            input("\nPressione ENTER para voltar ao menu...")
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )
 
         case 3:
             consultar_modulos()
-            input("\nPressione ENTER para voltar ao menu...")
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )
 
         case 4:
-            # Criar alerta
-            input("\nPressione ENTER para voltar ao menu...")
+            criar_alerta()
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )
 
         case 5:
-            # Analisar alerta
-            input("\nPressione ENTER para voltar ao menu...")
+            analisar_alerta()
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )
 
         case 6:
-            # Consultar histórico
-            input("\nPressione ENTER para voltar ao menu...")
+            consultar_historico()
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )
 
         case 7:
-            # Executar regra lógica
-            input("\nPressione ENTER para voltar ao menu...")
+            executar_regra_logica()
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )
 
         case 8:
-            # Assistente inteligente
-            input("\nPressione ENTER para voltar ao menu...")
+            assistente_inteligente()
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )
 
         case 9:
-            print("Encerrando o Sistema Operacional Aurora. Até logo!")
+            print(
+                "\nEncerrando o Sistema Operacional Aurora. "
+                "Até logo!"
+            )
             break
 
         case _:
-            print("Opção inválida.")
-            input("\nPressione ENTER para voltar ao menu...")
+            print("\nOpção inválida.")
+            input(
+                "\nPressione ENTER para voltar ao menu..."
+            )

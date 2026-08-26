@@ -1,0 +1,5 @@
+1|25/08/2026 21:23|Energia|Alta|Falta de energia|Finalizado
+2|25/08/2026 21:28|Energia|Média|Falta de energia|Pendente
+3|25/08/2026 21:33|Laboratorio|Média|Contaminação após experimento|Finalizado
+4|25/08/2026 21:42|Energia|Alta|Falta de energia 30 min|Pendente
+5|25/08/2026 21:48|laboratorio|Média|Fogo|Pendente

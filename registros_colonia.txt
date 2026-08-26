@@ -1,3 +1,6 @@
 [25/08/2026 20:58] | Módulo: Energia | Ocorrência: Queda em 20% | Responsável: Pedro Ribeiro Gesini
 [25/08/2026 21:00] | Módulo: Comunicação | Ocorrência: Perca de comunicação em 10 minutos | Responsável: Pedro Ribeiro Gesini
 [25/08/2026 21:01] | Módulo: Habitação | Ocorrência: Alto indice de mortalidade | Responsável: Pedro Ribeiro Gesini
+[25/08/2026 21:42] | Módulo: Energia | Ocorrência: Falta de energia | Responsável: Pedro Ribeiro Gesini
+[25/08/2026 21:46] | Módulo: Laboratorio | Ocorrência: fogo após testes | Responsável: Pedro Ribeiro Gesini
+[25/08/2026 21:47] | Módulo: Laboratorio | Ocorrência: Fogo após experimento | Responsável: Pedro Ribeiro Gesini
