@@ -3,3 +3,4 @@
 3|25/08/2026 21:33|Laboratorio|Média|Contaminação após experimento|Finalizado
 4|25/08/2026 21:42|Energia|Alta|Falta de energia 30 min|Pendente
 5|25/08/2026 21:48|laboratorio|Média|Fogo|Pendente
+6|25/08/2026 23:45|Produção de oxigênio|Crítica|produziu cerca de 20% a menos de oxigenio|Finalizado

@@ -1,8 +1,18 @@
 import json
-import os
+from pathlib import Path
 from tabulate import tabulate
 
-from historico import registrar_historico
+from .historico import registrar_historico
+
+
+# ==========================================
+# CAMINHOS DO PROJETO
+# ==========================================
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+PASTA_DATA = BASE_DIR / "data"
+
+ARQUIVO_JSON = PASTA_DATA / "dados_colonia.json"
 
 
 # ==========================================
@@ -114,16 +124,19 @@ colonia_aurora_siger = {
 }
 
 
-ARQUIVO_JSON = "dados_colonia.json"
-
-
 # ==========================================
 # CRIAR / ATUALIZAR JSON
 # ==========================================
 
 def criar_dados_json():
 
-    with open(ARQUIVO_JSON, "w", encoding="utf-8") as arquivo:
+    PASTA_DATA.mkdir(parents=True, exist_ok=True)
+
+    with open(
+        ARQUIVO_JSON,
+        "w",
+        encoding="utf-8"
+    ) as arquivo:
 
         json.dump(
             {
@@ -141,7 +154,7 @@ def criar_dados_json():
 
 def carregar_dados():
 
-    if not os.path.exists(ARQUIVO_JSON):
+    if not ARQUIVO_JSON.exists():
         criar_dados_json()
 
     try:
@@ -231,10 +244,6 @@ def consultar_modulos():
 
     print("=" * 120)
 
-    # ==========================================
-    # REGISTRAR NO HISTÓRICO
-    # ==========================================
-
     registrar_historico(
         "Consulta de módulos",
         "Sistema",
@@ -310,10 +319,6 @@ def consultar_modulo_especifico():
         )
 
     print("=" * 60)
-
-    # ==========================================
-    # REGISTRAR NO HISTÓRICO
-    # ==========================================
 
     registrar_historico(
         "Consulta de módulo",

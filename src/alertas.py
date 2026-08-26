@@ -1,11 +1,18 @@
-import os
+from pathlib import Path
 from datetime import datetime
 from tabulate import tabulate
 
-from historico import registrar_historico
+from .historico import registrar_historico
 
 
-ARQUIVO_ALERTAS = "alertas_colonia.txt"
+# ==========================================
+# CAMINHOS DO PROJETO
+# ==========================================
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+PASTA_DATA = BASE_DIR / "data"
+
+ARQUIVO_ALERTAS = PASTA_DATA / "alertas_colonia.txt"
 
 
 # ==========================================
@@ -38,10 +45,11 @@ def criar_alerta():
     print("4 - Crítica")
 
     try:
-        prioridade = int(input("\nDigite a prioridade: "))
+        prioridade = int(
+            input("\nDigite a prioridade: ")
+        )
 
     except ValueError:
-
         print("Digite apenas números.")
         return
 
@@ -63,7 +71,14 @@ def criar_alerta():
             print("Prioridade inválida.")
             return
 
-    data = datetime.now().strftime("%d/%m/%Y %H:%M")
+    PASTA_DATA.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    data = datetime.now().strftime(
+        "%d/%m/%Y %H:%M"
+    )
 
     id_alerta = gerar_id_alerta()
 
@@ -86,14 +101,13 @@ def criar_alerta():
 
         arquivo.write(linha)
 
-    # ==========================================
-    # REGISTRAR NO HISTÓRICO
-    # ==========================================
-
     registrar_historico(
         "Criação de alerta",
         modulo,
-        f"Alerta #{id_alerta} criado com prioridade {nivel}: {descricao}"
+        (
+            f"Alerta #{id_alerta} criado com "
+            f"prioridade {nivel}: {descricao}"
+        )
     )
 
     print("\n")
@@ -117,8 +131,7 @@ def criar_alerta():
 
 def gerar_id_alerta():
 
-    if not os.path.exists(ARQUIVO_ALERTAS):
-
+    if not ARQUIVO_ALERTAS.exists():
         return 1
 
     with open(
@@ -133,7 +146,25 @@ def gerar_id_alerta():
             if linha.strip()
         ]
 
-    return len(linhas) + 1
+    ids = []
+
+    for linha in linhas:
+
+        dados = linha.split("|", 1)
+
+        if not dados:
+            continue
+
+        try:
+            ids.append(int(dados[0]))
+
+        except ValueError:
+            continue
+
+    if not ids:
+        return 1
+
+    return max(ids) + 1
 
 
 # ==========================================
@@ -147,7 +178,7 @@ def analisar_alerta():
     print("                    ANALISAR ALERTA")
     print("=" * 70)
 
-    if not os.path.exists(ARQUIVO_ALERTAS):
+    if not ARQUIVO_ALERTAS.exists():
 
         print("\nNenhum alerta cadastrado.")
         return
@@ -173,7 +204,7 @@ def analisar_alerta():
 
     for linha in linhas:
 
-        dados = linha.split("|")
+        dados = linha.split("|", 5)
 
         if len(dados) != 6:
             continue
@@ -192,6 +223,11 @@ def analisar_alerta():
             status
         ])
 
+    if not tabela:
+
+        print("\nNenhum alerta válido encontrado.")
+        return
+
     print(
         tabulate(
             tabela,
@@ -209,7 +245,9 @@ def analisar_alerta():
     try:
 
         id_escolhido = int(
-            input("\nDigite o ID do alerta que deseja analisar: ")
+            input(
+                "\nDigite o ID do alerta que deseja analisar: "
+            )
         )
 
     except ValueError:
@@ -221,12 +259,18 @@ def analisar_alerta():
 
     for linha in linhas:
 
-        dados = linha.split("|")
+        dados = linha.split("|", 5)
 
         if len(dados) != 6:
             continue
 
-        if int(dados[0]) == id_escolhido:
+        try:
+            id_atual = int(dados[0])
+
+        except ValueError:
+            continue
+
+        if id_atual == id_escolhido:
 
             alerta_encontrado = dados
             break
@@ -321,9 +365,13 @@ def analisar_alerta():
 
             classificacao = "NÃO CLASSIFICADO"
 
-            analise = "Não foi possível determinar o nível de risco."
+            analise = (
+                "Não foi possível determinar o nível de risco."
+            )
 
-            recomendacao = "Realizar análise manual."
+            recomendacao = (
+                "Realizar análise manual."
+            )
 
     # ==========================================
     # EXIBIR ANÁLISE
@@ -351,14 +399,13 @@ def analisar_alerta():
     print("\nRECOMENDAÇÃO:")
     print(recomendacao)
 
-    # ==========================================
-    # REGISTRAR ANÁLISE NO HISTÓRICO
-    # ==========================================
-
     registrar_historico(
         "Análise de alerta",
         modulo,
-        f"Alerta #{id_alerta} analisado como {classificacao}"
+        (
+            f"Alerta #{id_alerta} analisado "
+            f"como {classificacao}"
+        )
     )
 
     print("\n" + "-" * 70)
@@ -373,7 +420,9 @@ def analisar_alerta():
 
     try:
 
-        opcao = int(input("\nDigite a opção: "))
+        opcao = int(
+            input("\nDigite a opção: ")
+        )
 
     except ValueError:
 
@@ -388,24 +437,35 @@ def analisar_alerta():
 
             for linha in linhas:
 
-                dados = linha.split("|")
+                dados = linha.split("|", 5)
 
                 if len(dados) != 6:
 
                     novas_linhas.append(linha)
                     continue
 
-                if int(dados[0]) == id_escolhido:
+                try:
+                    id_atual = int(dados[0])
+
+                except ValueError:
+                    novas_linhas.append(linha)
+                    continue
+
+                if id_atual == id_escolhido:
 
                     dados[5] = "Finalizado"
 
                     nova_linha = "|".join(dados)
 
-                    novas_linhas.append(nova_linha)
+                    novas_linhas.append(
+                        nova_linha
+                    )
 
                 else:
 
-                    novas_linhas.append(linha)
+                    novas_linhas.append(
+                        linha
+                    )
 
             with open(
                 ARQUIVO_ALERTAS,
@@ -415,11 +475,9 @@ def analisar_alerta():
 
                 for linha in novas_linhas:
 
-                    arquivo.write(linha + "\n")
-
-            # ==========================================
-            # REGISTRAR FINALIZAÇÃO NO HISTÓRICO
-            # ==========================================
+                    arquivo.write(
+                        linha + "\n"
+                    )
 
             registrar_historico(
                 "Finalização de alerta",
@@ -439,7 +497,9 @@ def analisar_alerta():
 
         case 2:
 
-            print("\nAlerta mantido como Pendente.")
+            print(
+                "\nAlerta mantido como Pendente."
+            )
 
         case _:
 

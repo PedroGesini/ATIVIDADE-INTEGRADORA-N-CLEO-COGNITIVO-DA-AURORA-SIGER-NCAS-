@@ -1,13 +1,14 @@
-import os
+from pathlib import Path
 from datetime import datetime
 from tabulate import tabulate
-
-from historico import registrar_historico
-
-
-ARQUIVO_TXT = "registros_colonia.txt"
+import os
+from src.historico import registrar_historico
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+PASTA_DATA = BASE_DIR / "data"
+
+ARQUIVO_TXT = PASTA_DATA / "registros_colonia.txt"
 # ==========================================
 # CADASTRAR REGISTRO
 # ==========================================

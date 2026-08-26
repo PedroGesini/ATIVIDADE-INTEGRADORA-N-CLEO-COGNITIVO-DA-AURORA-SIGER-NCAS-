@@ -1,5 +1,5 @@
-from modulos import carregar_dados
-from historico import registrar_historico
+from src.modulos import carregar_dados
+from src.historico import registrar_historico
 
 
 def executar_regra_logica():

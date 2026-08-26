@@ -1,9 +1,15 @@
-import os
+from pathlib import Path
 from datetime import datetime
 from tabulate import tabulate
 
+# ==========================================
+# CAMINHOS DO PROJETO
+# ==========================================
 
-ARQUIVO_HISTORICO = "historico_colonia.txt"
+BASE_DIR = Path(__file__).resolve().parent.parent
+PASTA_DATA = BASE_DIR / "data"
+
+ARQUIVO_HISTORICO = PASTA_DATA / "historico_colonia.txt"
 
 
 # ==========================================
@@ -12,11 +18,18 @@ ARQUIVO_HISTORICO = "historico_colonia.txt"
 
 def registrar_historico(acao, modulo="Sistema", descricao=""):
 
+    PASTA_DATA.mkdir(parents=True, exist_ok=True)
+
     data = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     linha = f"{data}|{acao}|{modulo}|{descricao}\n"
 
-    with open(ARQUIVO_HISTORICO, "a", encoding="utf-8") as arquivo:
+    with open(
+        ARQUIVO_HISTORICO,
+        "a",
+        encoding="utf-8"
+    ) as arquivo:
+
         arquivo.write(linha)
 
 
@@ -31,7 +44,7 @@ def consultar_historico():
     print("                    HISTÓRICO GERAL DO NCAS")
     print("=" * 110)
 
-    if not os.path.exists(ARQUIVO_HISTORICO):
+    if not ARQUIVO_HISTORICO.exists():
 
         print("\nNenhuma atividade registrada.")
         return
@@ -94,5 +107,6 @@ def consultar_historico():
 
     print("=" * 110)
 
-    print(f"\nTotal de atividades registradas: {len(tabela)}")
-    
+    print(
+        f"\nTotal de atividades registradas: {len(tabela)}"
+    )
