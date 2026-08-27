@@ -1,33 +1,28 @@
 from pathlib import Path
 from datetime import datetime
-from tabulate import tabulate
 
 from .historico import registrar_historico
+from .regras import alerta_deve_ser_priorizado
+from .tabela import exibir_tabela
 
 
-# CAMINHOS DO PROJETO
 BASE_DIR = Path(__file__).resolve().parent.parent
 PASTA_DATA = BASE_DIR / "data"
-
 ARQUIVO_ALERTAS = PASTA_DATA / "alertas_colonia.txt"
 
 
-# CRIAR ALERTA
 def criar_alerta():
-
     print("\n")
     print("=" * 70)
     print("                         CRIAR ALERTA")
     print("=" * 70)
 
     modulo = input("Módulo afetado: ").strip()
-
     if not modulo:
         print("O módulo não pode ficar vazio.")
         return
 
     descricao = input("Descrição do alerta: ").strip()
-
     if not descricao:
         print("A descrição não pode ficar vazia.")
         return
@@ -39,331 +34,146 @@ def criar_alerta():
     print("4 - Crítica")
 
     try:
-        prioridade = int(
-            input("\nDigite a prioridade: ")
-        )
-
+        prioridade = int(input("\nDigite a prioridade: "))
     except ValueError:
         print("Digite apenas números.")
         return
 
-    match prioridade:
+    niveis = {
+        1: "Baixa",
+        2: "Média",
+        3: "Alta",
+        4: "Crítica",
+    }
 
-        case 1:
-            nivel = "Baixa"
+    nivel = niveis.get(prioridade)
+    if nivel is None:
+        print("Prioridade inválida.")
+        return
 
-        case 2:
-            nivel = "Média"
-
-        case 3:
-            nivel = "Alta"
-
-        case 4:
-            nivel = "Crítica"
-
-        case _:
-            print("Prioridade inválida.")
-            return
-
-    PASTA_DATA.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    data = datetime.now().strftime(
-        "%d/%m/%Y %H:%M"
-    )
-
+    PASTA_DATA.mkdir(parents=True, exist_ok=True)
+    data = datetime.now().strftime("%d/%m/%Y %H:%M")
     id_alerta = gerar_id_alerta()
-
     status = "Pendente"
 
     linha = (
-        f"{id_alerta}|"
-        f"{data}|"
-        f"{modulo}|"
-        f"{nivel}|"
-        f"{descricao}|"
-        f"{status}\n"
+        f"{id_alerta}|{data}|{modulo}|{nivel}|"
+        f"{descricao}|{status}\n"
     )
 
-    with open(
-        ARQUIVO_ALERTAS,
-        "a",
-        encoding="utf-8"
-    ) as arquivo:
-
+    with open(ARQUIVO_ALERTAS, "a", encoding="utf-8") as arquivo:
         arquivo.write(linha)
 
     registrar_historico(
         "Criação de alerta",
         modulo,
-        (
-            f"Alerta #{id_alerta} criado com "
-            f"prioridade {nivel}: {descricao}"
-        )
+        f"Alerta #{id_alerta} criado com prioridade {nivel}: {descricao}",
     )
 
-    print("\n")
-    print("=" * 70)
+    print("\n" + "=" * 70)
     print("                 ALERTA CRIADO COM SUCESSO")
     print("=" * 70)
-
     print(f"ID:         {id_alerta}")
     print(f"Data/Hora:  {data}")
     print(f"Módulo:     {modulo}")
     print(f"Prioridade: {nivel}")
     print(f"Descrição:  {descricao}")
     print(f"Status:     {status}")
-
     print("=" * 70)
 
 
-
-# GERAR ID DO ALERTA
 def gerar_id_alerta():
-
     if not ARQUIVO_ALERTAS.exists():
         return 1
 
-    with open(
-        ARQUIVO_ALERTAS,
-        "r",
-        encoding="utf-8"
-    ) as arquivo:
-
-        linhas = [
-            linha.strip()
-            for linha in arquivo
-            if linha.strip()
-        ]
+    with open(ARQUIVO_ALERTAS, "r", encoding="utf-8") as arquivo:
+        linhas = [linha.strip() for linha in arquivo if linha.strip()]
 
     ids = []
 
     for linha in linhas:
-
         dados = linha.split("|", 1)
-
-        if not dados:
-            continue
-
         try:
             ids.append(int(dados[0]))
-
-        except ValueError:
+        except (ValueError, IndexError):
             continue
 
-    if not ids:
-        return 1
+    return max(ids) + 1 if ids else 1
 
-    return max(ids) + 1
-
-
-# ANALISAR ALERTA
 
 def analisar_alerta():
-
     print("\n")
     print("=" * 70)
     print("                    ANALISAR ALERTA")
     print("=" * 70)
 
     if not ARQUIVO_ALERTAS.exists():
-
         print("\nNenhum alerta cadastrado.")
         return
 
-    with open(
-        ARQUIVO_ALERTAS,
-        "r",
-        encoding="utf-8"
-    ) as arquivo:
-
-        linhas = [
-            linha.strip()
-            for linha in arquivo
-            if linha.strip()
-        ]
+    with open(ARQUIVO_ALERTAS, "r", encoding="utf-8") as arquivo:
+        linhas = [linha.strip() for linha in arquivo if linha.strip()]
 
     if not linhas:
-
         print("\nNenhum alerta cadastrado.")
         return
 
     tabela = []
 
     for linha in linhas:
-
         dados = linha.split("|", 5)
-
         if len(dados) != 6:
             continue
 
-        id_alerta = dados[0]
-        data = dados[1]
-        modulo = dados[2]
-        prioridade = dados[3]
-        status = dados[5]
-
         tabela.append([
-            id_alerta,
-            data,
-            modulo,
-            prioridade,
-            status
+            dados[0].strip(),
+            dados[1].strip(),
+            dados[2].strip(),
+            dados[3].strip(),
+            dados[5].strip(),
         ])
 
     if not tabela:
-
         print("\nNenhum alerta válido encontrado.")
         return
 
-    print(
-        tabulate(
-            tabela,
-            headers=[
-                "ID",
-                "Data/Hora",
-                "Módulo",
-                "Prioridade",
-                "Status"
-            ],
-            tablefmt="grid"
-        )
+    exibir_tabela(
+        ["ID", "Data/Hora", "Módulo", "Prioridade", "Status"],
+        tabela,
+        [6, 16, 28, 12, 12],
     )
 
     try:
-
-        id_escolhido = int(
-            input(
-                "\nDigite o ID do alerta que deseja analisar: "
-            )
-        )
-
+        id_escolhido = int(input("\nDigite o ID do alerta que deseja analisar: "))
     except ValueError:
-
         print("\nDigite um ID válido.")
         return
 
     alerta_encontrado = None
 
     for linha in linhas:
-
         dados = linha.split("|", 5)
-
         if len(dados) != 6:
             continue
 
         try:
             id_atual = int(dados[0])
-
         except ValueError:
             continue
 
         if id_atual == id_escolhido:
-
-            alerta_encontrado = dados
+            alerta_encontrado = [campo.strip() for campo in dados]
             break
 
     if alerta_encontrado is None:
-
         print("\nAlerta não encontrado.")
         return
 
-    id_alerta = alerta_encontrado[0]
-    data = alerta_encontrado[1]
-    modulo = alerta_encontrado[2]
-    prioridade = alerta_encontrado[3]
-    descricao = alerta_encontrado[4]
-    status = alerta_encontrado[5]
+    id_alerta, data, modulo, prioridade, descricao, status = alerta_encontrado
 
-    # VERIFICAR SE JÁ FOI FINALIZADO
-    if status == "Finalizado":
-
-        print("\nEste alerta já foi finalizado.")
-        print(f"ID: {id_alerta}")
-        print(f"Módulo: {modulo}")
-
-        return
-
-    # ANÁLISE DA PRIORIDADE
-    match prioridade:
-
-        case "Baixa":
-
-            classificacao = "BAIXO RISCO"
-
-            analise = (
-                "O alerta apresenta baixo impacto operacional. "
-                "Recomenda-se acompanhar a situação."
-            )
-
-            recomendacao = (
-                "Monitorar o módulo e realizar intervenção "
-                "caso o problema evolua."
-            )
-
-        case "Média":
-
-            classificacao = "RISCO MODERADO"
-
-            analise = (
-                "O alerta apresenta impacto operacional moderado. "
-                "A situação deve ser acompanhada pela equipe responsável."
-            )
-
-            recomendacao = (
-                "Realizar uma verificação preventiva e acompanhar "
-                "a evolução do problema."
-            )
-
-        case "Alta":
-
-            classificacao = "ALTO RISCO"
-
-            analise = (
-                "O alerta apresenta potencial de impacto significativo "
-                "na operação da colônia."
-            )
-
-            recomendacao = (
-                "Priorizar a análise do módulo e realizar intervenção "
-                "em curto prazo."
-            )
-
-        case "Crítica":
-
-            classificacao = "RISCO CRÍTICO"
-
-            analise = (
-                "O alerta apresenta risco crítico para a operação "
-                "da colônia e pode comprometer sistemas essenciais."
-            )
-
-            recomendacao = (
-                "Realizar intervenção imediata e priorizar o módulo "
-                "afetado."
-            )
-
-        case _:
-
-            classificacao = "NÃO CLASSIFICADO"
-
-            analise = (
-                "Não foi possível determinar o nível de risco."
-            )
-
-            recomendacao = (
-                "Realizar análise manual."
-            )
-
-   
-    # EXIBIR ANÁLISE
-    print("\n")
+    print("\n" + "=" * 70)
+    print("                     DADOS DO ALERTA")
     print("=" * 70)
-    print("                     ANÁLISE DO ALERTA")
-    print("=" * 70)
-
     print(f"ID:          {id_alerta}")
     print(f"Data/Hora:   {data}")
     print(f"Módulo:      {modulo}")
@@ -371,116 +181,91 @@ def analisar_alerta():
     print(f"Descrição:   {descricao}")
     print(f"Status:      {status}")
 
+    if status == "Finalizado":
+        print("\nResultado: este alerta já está Finalizado.")
+        registrar_historico(
+            "Análise de alerta",
+            modulo,
+            f"Consulta do alerta #{id_alerta}, já finalizado.",
+        )
+        return
+
+    prioritario = alerta_deve_ser_priorizado(status, prioridade)
+
     print("\n" + "-" * 70)
+    print("RESULTADO DA REGRA LÓGICA:")
 
-    print(f"CLASSIFICAÇÃO: {classificacao}")
-
-    print("\nANÁLISE:")
-    print(analise)
-
-    print("\nRECOMENDAÇÃO:")
-    print(recomendacao)
+    if prioritario:
+        print("ATENÇÃO PRIORITÁRIA: SIM")
+        print(
+            "Motivo: o alerta está Pendente e a prioridade cadastrada "
+            f"é {prioridade}."
+        )
+        resultado_historico = "atende à regra de atenção prioritária"
+    else:
+        print("ATENÇÃO PRIORITÁRIA: NÃO")
+        print(
+            "Motivo: o alerta não reúne simultaneamente as condições "
+            "definidas pela regra P AND (A OR C)."
+        )
+        resultado_historico = "não atende à regra de atenção prioritária"
 
     registrar_historico(
         "Análise de alerta",
         modulo,
-        (
-            f"Alerta #{id_alerta} analisado "
-            f"como {classificacao}"
-        )
+        f"Alerta #{id_alerta} analisado: {resultado_historico}.",
     )
 
-    print("\n" + "-" * 70)
-
-
-    # FINALIZAR ALERTA
     print("\nDeseja finalizar este alerta?")
     print("1 - Sim")
     print("2 - Não")
 
     try:
-
-        opcao = int(
-            input("\nDigite a opção: ")
-        )
-
+        opcao = int(input("\nDigite a opção: "))
     except ValueError:
-
         print("\nOpção inválida.")
         return
 
-    match opcao:
+    if opcao == 1:
+        novas_linhas = []
 
-        case 1:
+        for linha in linhas:
+            dados = linha.split("|", 5)
+            if len(dados) != 6:
+                novas_linhas.append(linha)
+                continue
 
-            novas_linhas = []
+            try:
+                id_atual = int(dados[0])
+            except ValueError:
+                novas_linhas.append(linha)
+                continue
 
-            for linha in linhas:
+            if id_atual == id_escolhido:
+                dados[5] = "Finalizado"
+                novas_linhas.append("|".join(dados))
+            else:
+                novas_linhas.append(linha)
 
-                dados = linha.split("|", 5)
+        with open(ARQUIVO_ALERTAS, "w", encoding="utf-8") as arquivo:
+            for linha in novas_linhas:
+                arquivo.write(linha + "\n")
 
-                if len(dados) != 6:
+        registrar_historico(
+            "Finalização de alerta",
+            modulo,
+            f"Alerta #{id_alerta} finalizado",
+        )
 
-                    novas_linhas.append(linha)
-                    continue
+        print("\n" + "=" * 70)
+        print("                 ALERTA FINALIZADO")
+        print("=" * 70)
+        print(f"ID:      {id_alerta}")
+        print(f"Módulo:  {modulo}")
+        print("Status:  Finalizado")
+        print("=" * 70)
 
-                try:
-                    id_atual = int(dados[0])
-
-                except ValueError:
-                    novas_linhas.append(linha)
-                    continue
-
-                if id_atual == id_escolhido:
-
-                    dados[5] = "Finalizado"
-
-                    nova_linha = "|".join(dados)
-
-                    novas_linhas.append(
-                        nova_linha
-                    )
-
-                else:
-
-                    novas_linhas.append(
-                        linha
-                    )
-
-            with open(
-                ARQUIVO_ALERTAS,
-                "w",
-                encoding="utf-8"
-            ) as arquivo:
-
-                for linha in novas_linhas:
-
-                    arquivo.write(
-                        linha + "\n"
-                    )
-
-            registrar_historico(
-                "Finalização de alerta",
-                modulo,
-                f"Alerta #{id_alerta} finalizado"
-            )
-
-            print("\n" + "=" * 70)
-            print("                 ALERTA FINALIZADO")
-            print("=" * 70)
-
-            print(f"ID:      {id_alerta}")
-            print(f"Módulo:  {modulo}")
-            print("Status:  Finalizado")
-
-            print("=" * 70)
-
-        case 2:
-
-            print(
-                "\nAlerta mantido como Pendente."
-            )
-
-        case _:
-
-            print("\nOpção inválida.")
+    elif opcao == 2:
+        print("\nAlerta mantido como Pendente.")
+    else:
+        print("\nOpção inválida.")

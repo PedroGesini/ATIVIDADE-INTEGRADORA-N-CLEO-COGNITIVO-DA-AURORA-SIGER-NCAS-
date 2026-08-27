@@ -1,14 +1,13 @@
-from src.registros import cadastrar_registro, consultar_registros
-from src.modulos import consultar_modulos, consultar_modulo_especifico
-from src.alertas import criar_alerta, analisar_alerta
+from src.registros import cadastrar_registro,consultar_registros
+from src.modulos import consultar_modulos
+from src.alertas import criar_alerta,analisar_alerta
 from src.historico import consultar_historico
 from src.regras import executar_regra_logica
+from src.prompts import exibir_prompts
 from src.assistente import assistente_inteligente
 
 
 #      NCAS - AURORA SIGER
-
-
 while True:
 
     print("\n" + "=" * 50)
