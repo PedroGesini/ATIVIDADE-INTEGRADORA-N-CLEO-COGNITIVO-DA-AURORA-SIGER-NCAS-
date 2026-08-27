@@ -30,3 +30,4 @@
 26/08/2026 22:08:59|Criação de alerta|Energia|Alerta #8 criado com prioridade Crítica: Falta de energiaaaaaaaaaa
 26/08/2026 22:09:13|Análise de alerta|Energia|Alerta #8 analisado: atende à regra de atenção prioritária.
 26/08/2026 22:09:22|Finalização de alerta|Energia|Alerta #8 finalizado
+26/08/2026 22:15:50|Consulta de prompts|Sistema|Prompts zero-shot, few-shot e saída estruturada exibidos.

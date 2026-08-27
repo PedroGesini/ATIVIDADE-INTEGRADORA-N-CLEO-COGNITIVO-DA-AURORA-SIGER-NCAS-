@@ -8,7 +8,7 @@ def _texto(valor):
 
 
 def exibir_tabela(cabecalhos, linhas, larguras_maximas=None):
-    """Exibe uma tabela ASCII usando apenas a biblioteca padrão do Python."""
+    """Exibe uma tabela ASCII"""
     if not cabecalhos:
         return
 
