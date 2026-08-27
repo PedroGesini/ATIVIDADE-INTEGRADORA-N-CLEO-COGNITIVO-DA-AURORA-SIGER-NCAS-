@@ -5,7 +5,7 @@ from src.historico import consultar_historico
 from src.regras import executar_regra_logica
 from src.prompts import exibir_prompts
 from src.assistente import assistente_inteligente
-
+from src.registros import cadastrar_registro, consultar_registros
 
 
 # NCAS - NÚCLEO COGNITIVO DA AURORA SIGER
