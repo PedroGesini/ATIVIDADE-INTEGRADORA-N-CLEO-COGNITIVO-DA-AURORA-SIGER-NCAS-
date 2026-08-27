@@ -11,6 +11,7 @@ ARQUIVO_TXT = PASTA_DATA / "registros_colonia.txt"
 
 
 def cadastrar_registro():
+    """Cadastra um novo registro no armazenamento secundário (arquivo TXT)."""
     print("\n")
     print("=" * 70)
     print("                 CADASTRAR REGISTRO")
@@ -21,7 +22,7 @@ def cadastrar_registro():
         print("O módulo não pode ficar vazio.")
         return
 
-    descricao = input("Descrição da ocorrência: ").strip()
+    descricao = input("Descrição da ocorrência: ").strip().replace("|", "-")
     if not descricao:
         print("A descrição não pode ficar vazia.")
         return
@@ -56,6 +57,7 @@ def cadastrar_registro():
 
 
 def consultar_registros():
+    """Carrega os registros do disco para a memória RAM e exibe na tabela."""
     print("\n")
     print("=" * 120)
     print("                    REGISTROS DA COLÔNIA AURORA SIGER")
@@ -64,7 +66,7 @@ def consultar_registros():
     if not ARQUIVO_TXT.exists():
         print("\nNenhum registro encontrado.")
         return
-
+# Lê os dados do armazenamento secundário (disco) e traz para a RAM
     with open(ARQUIVO_TXT, "r", encoding="utf-8") as arquivo:
         linhas = [linha.strip() for linha in arquivo if linha.strip()]
 
