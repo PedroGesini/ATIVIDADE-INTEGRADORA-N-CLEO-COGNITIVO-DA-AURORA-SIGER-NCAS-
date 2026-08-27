@@ -66,7 +66,7 @@ def consultar_registros():
     if not ARQUIVO_TXT.exists():
         print("\nNenhum registro encontrado.")
         return
-# Lê os dados do armazenamento secundário (disco) e traz para a RAM
+# Lê os dados do armazenamento secundário (disco) e traz para a memória RAM
     with open(ARQUIVO_TXT, "r", encoding="utf-8") as arquivo:
         linhas = [linha.strip() for linha in arquivo if linha.strip()]
 
